@@ -40,9 +40,10 @@ function Homepage() {
           </p>
           <div className="button-group">
 
-            <a href="../pdf/Akil_bariya-React.js developer.pdf" download="My_Resume.pdf" className="btn btn-primary">
+            <a href="/Akil_bariya-React.js developer.pdf" download="My_Resume.pdf" className="btn btn-primary">
               Download Resume
             </a>
+
             <Link to="/contact" className="btn btn-primary">Contact_us</Link>
           </div>
         </div>
