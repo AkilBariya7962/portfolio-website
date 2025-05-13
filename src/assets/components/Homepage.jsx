@@ -39,7 +39,10 @@ function Homepage() {
             I build sustainable, scalable solutions that make a real impact.
           </p>
           <div className="button-group">
-            <Link to="#resume" className="btn btn-primary">Download Resume</Link>
+
+            <a href="../pdf/Akil_bariya-React.js developer.pdf" download="My_Resume.pdf" className="btn btn-primary">
+              Download Resume
+            </a>
             <Link to="/contact" className="btn btn-primary">Contact_us</Link>
           </div>
         </div>
