@@ -16,8 +16,6 @@ function Homepage() {
     const newMessages = [...messages, { from: "user", text: input }];
     setMessages(newMessages);
     setInput("");
-
-    // Bot reply
     setTimeout(() => {
       setMessages(prev => [
         ...prev,
