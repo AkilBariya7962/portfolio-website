@@ -1,195 +1,110 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   AppBar,
   Toolbar,
-  Typography,
   IconButton,
-  Button,
-  Box,
   Drawer,
   List,
   ListItem,
   ListItemText,
-  useTheme,
+  Box,
+  Typography,
   useMediaQuery,
+  useTheme,
+  Slide,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import home from '../components/img/logo.png';
 import { Link, useLocation } from "react-router-dom";
-import { Facebook, Twitter, Instagram, LinkedIn } from "@mui/icons-material";
+
+const navLinks = [
+  { name: "Home", path: "/" },
+  { name: "Projects", path: "/projects" },
+  { name: "Education", path: "/education" },
+  { name: "About", path: "/about" },
+];
 
 const Navbar = () => {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const location = useLocation();
 
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
-
-  const navLinks = [
-    { name: "Home", path: "/" },
-    { name: "Projects", path: "/projects" },
-    { name: "Education", path: "/education" },
-    { name: "About", path: "/about" },
-  ];
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 60);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const appBarStyles = {
-    backgroundColor: scrolled ? "#001c55" : "#edf9fe",
-    color: scrolled ? "#ffffff" : "#0A2472",
-    transition: "background-color 0.3s ease, color 0.3s ease",
-    boxShadow: scrolled ? "0 2px 10px rgba(0, 0, 0, 0.15)" : "none",
-    px: isMobile ? 0 : 5,
-    py: 1,
-  };
+  const toggleDrawer = () => setOpen(!open);
 
   return (
     <>
-      <AppBar position="fixed" sx={appBarStyles}>
-        <Toolbar>
-          <Typography
-            variant="h6"
-            component={Link}
-            to="/"
-            sx={{
-              flexGrow: 1,
-              fontWeight: "bold",
-              fontSize: { xs: "20px", sm: "24px", md: "27px" },
-              color: scrolled ? "#ffffff" : "#0A2472",
-              textDecoration: "none",
-              "&:hover": {
-                opacity: 0.9,
-              },
-            }}
-          >
-            𝔸𝕊 𝔹𝔸ℝ𝕀𝕐𝔸
-          </Typography>
-
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            {navLinks.map((link, index) => (
-              <Button
-                key={index}
-                component={Link}
-                to={link.path}
-                sx={{
-                  color:
-                    location.pathname === link.path
-                      ? scrolled ? "#ffffff" : "#0A2472"
-                      : scrolled ? "#ffffff" : "#001C55",
-                  mx: { xs: 0.5, sm: 1 },
-                  fontSize: { xs: "13px", sm: "14px", md: "15px" },
-                  fontWeight: location.pathname === link.path ? "bold" : "normal",
-                  "&:hover": {
-                    backgroundColor: "transparent",
-                    color: scrolled ? "#e0e0e0" : "#0A2472",
-                    fontWeight: "bold",
-                  },
-                }}
-              >
-                {link.name}
-              </Button>
-            ))}
-          </Box>
-
-          <IconButton
-            edge="end"
-            sx={{
-              display: { xs: "block", md: "none" },
-              color: scrolled ? "#ffffff" : "#001C55",
-            }}
-            aria-label="menu"
-            onClick={handleDrawerToggle}
-          >
-            <MenuIcon />
-          </IconButton>
+      <AppBar position="fixed" elevation={0} sx={{ background: "transparent", boxShadow: "none" }}>
+        <Toolbar sx={{ justifyContent: "flex-end", px: 3 }}>
+          <Slide direction="down" in={true} timeout={700}>
+            <IconButton
+              onClick={toggleDrawer}
+              sx={{
+                backgroundColor: "#001C55",
+                "&:hover": { backgroundColor: "#0A2472" },
+                color: "#fff",
+                p: 1.5,
+                borderRadius: "12px",
+                transition: "all 0.3s ease-in-out",
+              }}
+            >
+              <MenuIcon fontSize="large" />
+            </IconButton>
+          </Slide>
         </Toolbar>
       </AppBar>
 
       <Drawer
-        anchor="right"
-        open={mobileOpen}
-        onClose={handleDrawerToggle}
+        anchor="left"
+        open={open}
+        onClose={toggleDrawer}
         PaperProps={{
           sx: {
-            boxShadow: "none",
-            backgroundColor: "#edf9fe",
-            width: 250,
+            background: "linear-gradient(135deg, #001C55, #0A2472)",
+            color: "white",
+            width: isMobile ? "100%" : "400px",
+            pt: 6,
+            px: 3,
+            borderTopRightRadius: 40,
+            borderBottomRightRadius: 40,
           },
         }}
       >
-        <Box sx={{ textAlign: "center", paddingTop: 2, paddingLeft: 3, paddingRight: 2 }}>
-          <img
-            src={home}
-            alt="Logo"
-            width="250"
-            style={{ objectFit: "contain" }}
-          />
+        <Box sx={{ mb: 4 }}>
+          <Typography variant="h4" sx={{ fontWeight: "bold", textAlign: "center" }}>
+            𝔸𝕊 𝔹𝔸ℝ𝕀𝕐𝔸
+          </Typography>
         </Box>
-        <List sx={{ paddingTop: 2 }}>
-          {navLinks.map((link, index) => (
+
+        <List>
+          {navLinks.map((link, i) => (
             <ListItem
-              button
-              key={index}
+              key={i}
               component={Link}
               to={link.path}
-              onClick={handleDrawerToggle}
+              onClick={toggleDrawer}
               sx={{
+                my: 2,
+                borderRadius: 2,
+                transition: "all 0.3s ease",
+                backgroundColor:
+                  location.pathname === link.path ? "rgba(255,255,255,0.15)" : "transparent",
                 "&:hover": {
-                  backgroundColor: "#e0f2fe",
+                  backgroundColor: "rgba(255,255,255,0.2)",
+                  pl: 3,
                 },
-                backgroundColor: location.pathname === link.path ? "#e0f2fe" : "transparent",
               }}
             >
               <ListItemText
                 primary={link.name}
                 primaryTypographyProps={{
-                  color: "#001C55",
-                  fontWeight: location.pathname === link.path ? "bold" : "medium",
-                  fontSize: "16px",
+                  fontSize: "1.5rem",
+                  fontWeight: "bold",
                   textAlign: "center",
                 }}
               />
             </ListItem>
           ))}
         </List>
-        <Box sx={{ display: "flex", justifyContent: "center", marginTop: 3 }}>
-          <IconButton
-            component="a"
-            href="/"
-            target="_blank"
-            sx={{ color: "#00acee", mx: 1 }}
-          >
-            <Twitter />
-          </IconButton>
-          <IconButton
-            component="a"
-            href="/"
-            target="_blank"
-            sx={{ color: "#e4405f", mx: 1 }}
-          >
-            <Instagram />
-          </IconButton>
-          <IconButton
-            component="a"
-            href="https://www.linkedin.com/in/akil-bariya-452a7725a/"
-            target="_blank"
-            sx={{ color: "#0e76a8", mx: 1 }}
-          >
-            <LinkedIn />
-          </IconButton>
-        </Box>
       </Drawer>
     </>
   );
