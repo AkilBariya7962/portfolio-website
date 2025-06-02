@@ -1,110 +1,107 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   AppBar,
   Toolbar,
+  Typography,
   IconButton,
   Drawer,
   List,
   ListItem,
   ListItemText,
   Box,
-  Typography,
   useMediaQuery,
   useTheme,
-  Slide,
-} from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import { Link, useLocation } from "react-router-dom";
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import { FaGithub, FaLinkedin, FaTwitter, FaInstagram } from 'react-icons/fa';
 
-const navLinks = [
-  { name: "Home", path: "/" },
-  { name: "Projects", path: "/projects" },
-  { name: "Education", path: "/education" },
-  { name: "About", path: "/about" },
-];
+const navItems = ['Home', 'Projects', 'Education', 'About'];
 
 const Navbar = () => {
-  const [open, setOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const location = useLocation();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const toggleDrawer = () => setOpen(!open);
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
+      <Typography variant="h6" sx={{ my: 2 }}>
+        Akil Bariya
+      </Typography>
+      <List>
+        {navItems.map((item) => (
+          <ListItem button key={item}>
+            <ListItemText primary={item} />
+          </ListItem>
+        ))}
+      </List>
+      <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mt: 2 }}>
+        <IconButton href="https://github.com/akilbariya7962" target="_blank">
+          <FaGithub />
+        </IconButton>
+        <IconButton href="https://www.linkedin.com/in/akil-bariya-452a7725a/" target="_blank">
+          <FaLinkedin />
+        </IconButton>
+        <IconButton href="https://twitter.com/yourprofile" target="_blank">
+          <FaTwitter />
+        </IconButton>
+        <IconButton href="https://instagram.com/yourprofile" target="_blank">
+          <FaInstagram />
+        </IconButton>
+      </Box>
+    </Box>
+  );
 
   return (
     <>
-      <AppBar position="fixed" elevation={0} sx={{ background: "transparent", boxShadow: "none" }}>
-        <Toolbar sx={{ justifyContent: "flex-end", px: 3 }}>
-          <Slide direction="down" in={true} timeout={700}>
+      <AppBar position="static" sx={{ backgroundColor: '#001c55' }}>
+        <Toolbar>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            Akil Bariya
+          </Typography>
+          {isMobile ? (
             <IconButton
-              onClick={toggleDrawer}
-              sx={{
-                backgroundColor: "#001C55",
-                "&:hover": { backgroundColor: "#0A2472" },
-                color: "#fff",
-                p: 1.5,
-                borderRadius: "12px",
-                transition: "all 0.3s ease-in-out",
-              }}
+              color="inherit"
+              edge="start"
+              onClick={handleDrawerToggle}
             >
-              <MenuIcon fontSize="large" />
+              <MenuIcon />
             </IconButton>
-          </Slide>
+          ) : (
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              {navItems.map((item) => (
+                <Typography key={item} variant="button">
+                  {item}
+                </Typography>
+              ))}
+              <IconButton href="https://github.com/akilbariya7962" target="_blank" color="inherit">
+                <FaGithub />
+              </IconButton>
+              <IconButton href="https://www.linkedin.com/in/akil-bariya-452a7725a/" target="_blank" color="inherit">
+                <FaLinkedin />
+              </IconButton>
+              <IconButton href="https://twitter.com/yourprofile" target="_blank" color="inherit">
+                <FaTwitter />
+              </IconButton>
+              <IconButton href="https://instagram.com/yourprofile" target="_blank" color="inherit">
+                <FaInstagram />
+              </IconButton>
+            </Box>
+          )}
         </Toolbar>
       </AppBar>
-
       <Drawer
-        anchor="left"
-        open={open}
-        onClose={toggleDrawer}
-        PaperProps={{
-          sx: {
-            background: "linear-gradient(135deg, #001C55, #0A2472)",
-            color: "white",
-            width: isMobile ? "100%" : "400px",
-            pt: 6,
-            px: 3,
-            borderTopRightRadius: 40,
-            borderBottomRightRadius: 40,
-          },
+        anchor="right"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true,
         }}
       >
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h4" sx={{ fontWeight: "bold", textAlign: "center" }}>
-            𝔸𝕊 𝔹𝔸ℝ𝕀𝕐𝔸
-          </Typography>
-        </Box>
-
-        <List>
-          {navLinks.map((link, i) => (
-            <ListItem
-              key={i}
-              component={Link}
-              to={link.path}
-              onClick={toggleDrawer}
-              sx={{
-                my: 2,
-                borderRadius: 2,
-                transition: "all 0.3s ease",
-                backgroundColor:
-                  location.pathname === link.path ? "rgba(255,255,255,0.15)" : "transparent",
-                "&:hover": {
-                  backgroundColor: "rgba(255,255,255,0.2)",
-                  pl: 3,
-                },
-              }}
-            >
-              <ListItemText
-                primary={link.name}
-                primaryTypographyProps={{
-                  fontSize: "1.5rem",
-                  fontWeight: "bold",
-                  textAlign: "center",
-                }}
-              />
-            </ListItem>
-          ))}
-        </List>
+        {drawer}
       </Drawer>
     </>
   );
